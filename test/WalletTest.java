@@ -3,7 +3,9 @@ import java.util.Date;
 
 import org.junit.*;
 
-public class WalletTest {
+import junit.framework.TestCase;
+
+public class WalletTest extends TestCase {
 
     Wallet wallet;
 
