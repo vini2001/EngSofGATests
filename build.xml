@@ -75,6 +75,7 @@
   <target name="run-test" depends="test">
     <delete verbose="${TALK}">
       <fileset dir="${tst-dir}" includes="**/*.class" />
+      <fileset dir="" includes="TEST-WalletTest.xml" />
     </delete>
   </target>
 
