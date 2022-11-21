@@ -1,4 +1,4 @@
-<project name="Wallet" default="dist" basedir=".">
+<project name="Wallet" default="dist" basedir="." >
   <description>
     simple example build file
   </description>
@@ -10,13 +10,13 @@
   <property name="lib" location="lib" />
    <property name="TALK" value="true" />
 
-  <path id="classpath.base">
-    <pathelement location="${lib}" />
-  </path>
   <path id="classpath.test">
+    <fileset dir="${lib}" includes="*.jar"/>
+
+    <pathelement location="${lib}/junit.jar" />
+    <pathelement location="${lib}"/>
     <pathelement location="${tst-dir}" />
     <pathelement location="${build}" />
-    <path refid="classpath.base" />
   </path>
 
   <target name="init">
@@ -29,7 +29,9 @@
   <target name="compile" depends="init"
         description="compile the source">
     <!-- Compile the Java code from ${src} into ${build} -->
-    <javac srcdir="${src}" destdir="${build}"/>
+    <javac includeantruntime="true" srcdir="${src}" destdir="${build}">
+      <classpath refid="classpath.test" />
+    </javac>
   </target>
 
   <target name="dist" depends="compile"
@@ -49,12 +51,12 @@
   </target>
 
   <target name="run" depends="compile">
-    <java classname="Main" fork="true" classpath="${build}"/>
+    <java  includeantruntime="true" classname="Main" fork="true" classpath="${build}"/>
   </target>
 
 
   <target name="compile-test" depends="compile">
-    <javac srcdir="${tst-dir}"
+    <javac includeantruntime="true" srcdir="${tst-dir}"
            verbose="${TALK}" >
       <classpath refid="classpath.test"/>
     </javac>
