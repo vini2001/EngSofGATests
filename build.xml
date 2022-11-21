@@ -1,0 +1,83 @@
+<project name="Wallet" default="dist" basedir=".">
+  <description>
+    simple example build file
+  </description>
+  <!-- set global properties for this build -->
+  <property name="src" location=""/>
+  <property name="build" location="build"/>
+  <property name="dist" location="dist"/>
+  <property name="tst-dir" location="test" />
+   <property name="TALK" value="true" />
+
+  <path id="classpath.base">
+  </path>
+  <path id="classpath.test">
+    <pathelement location="${tst-dir}" />
+    <pathelement location="${build}" />
+    <path refid="classpath.base" />
+  </path>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="compile" depends="init"
+        description="compile the source">
+    <!-- Compile the Java code from ${src} into ${build} -->
+    <javac srcdir="${src}" destdir="${build}"/>
+  </target>
+
+  <target name="dist" depends="compile"
+        description="generate the distribution">
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}/lib"/>
+
+    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+    <jar jarfile="${dist}/lib/Wallet-${DSTAMP}.jar" basedir="${build}"/>
+  </target>
+
+  <target name="clean"
+        description="clean up">
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+  </target>
+
+  <target name="run" depends="compile">
+    <java classname="Main" fork="true" classpath="${build}"/>
+  </target>
+
+
+  <target name="compile-test" depends="compile">
+    <javac srcdir="${tst-dir}"
+           verbose="${TALK}" >
+      <classpath refid="classpath.test"/>
+    </javac>
+  </target>
+  <target name="clean-compile-test">
+    <delete verbose="${TALK}">
+      <fileset dir="${tst-dir}" includes="**/*.class" />
+    </delete>
+  </target>
+
+  <target name="test" description="run all junit tests" depends="compile-test">
+        <junit printsummary="yes" haltonfailure="yes">
+          <classpath refid="classpath.test" />
+            <formatter type="xml"/>
+            <test name="WalletTest" />
+            
+        </junit>        
+  </target>
+
+  <target name="run-test" depends="test">
+    <delete verbose="${TALK}">
+      <fileset dir="${tst-dir}" includes="**/*.class" />
+    </delete>
+  </target>
+
+
+
+</project>
